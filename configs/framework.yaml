@@ -1,0 +1,42 @@
+experiment:
+  name: mlc_baseline
+
+data:
+  path: data/preprocessed/dataset.parquet
+  feature_columns: []
+  label_columns: []
+
+model:
+  hidden_dims: [128, 64]
+  activation: relu
+  dropout: 0.2
+  use_missingness_mask: true
+
+training:
+  epochs: 100
+  batch_size: 64
+  learning_rate: 0.001
+  weight_decay: 0.0
+  optimizer: adam
+
+loss:
+  type: masked_bce
+  pos_weight: null
+
+split:
+  train: 0.7
+  val: 0.15
+  test: 0.15
+  seed: 42
+
+hash_params:
+  - model.hidden_dims
+  - model.activation
+  - model.dropout
+  - model.use_missingness_mask
+  - training.learning_rate
+  - training.weight_decay
+  - training.optimizer
+  - loss.type
+  - loss.pos_weight
+  - split.seed
