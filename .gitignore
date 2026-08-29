@@ -4,9 +4,7 @@ __pycache__/
 .ipynb_checkpoints/
 .venv/
 
-data/raw/*
-!data/raw/.gitkeep
+data/*
 data/preprocessed/*
-!data/preprocessed/.gitkeep
 artifacts/*
 !artifacts/.gitkeep
