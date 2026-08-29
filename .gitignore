@@ -8,3 +8,5 @@ data/*
 data/preprocessed/*
 artifacts/*
 !artifacts/.gitkeep
+/configs/projects/*
+!/configs/projects/bmra_student_project.yaml

@@ -4,5 +4,7 @@ pandas
 pyarrow
 openpyxl
 PyYAML
+matplotlib
+scikit-learn
 jupyter
 pytest

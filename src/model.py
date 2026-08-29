@@ -1,4 +1,5 @@
 from collections.abc import Sequence
+from typing import Any
 
 import torch
 from torch import nn
@@ -42,3 +43,13 @@ class MultilabelMLP(nn.Module):
                 raise ValueError("missingness_mask is required when enabled")
             features = torch.cat([features, missingness_mask], dim=-1)
         return self.network(features)
+
+
+def build_model(
+    framework_config: dict[str, Any], project_config: dict[str, Any]
+) -> MultilabelMLP:
+    return MultilabelMLP(
+        num_features=len(project_config["features"]),
+        num_labels=len(project_config["labels"]),
+        **framework_config["model"],
+    )

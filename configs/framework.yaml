@@ -1,19 +1,21 @@
 experiment:
   name: mlc_baseline
 
+project:
+  config_path: configs/projects/bmra_student_project.yaml
+
 data:
   path: data/preprocessed/dataset.parquet
-  feature_columns: []
-  label_columns: []
 
 model:
-  hidden_dims: [128, 64]
+  hidden_dims: [128, 128, 64]
   activation: relu
   dropout: 0.2
   use_missingness_mask: true
 
 training:
-  epochs: 100
+  epochs: 300
+  early_stopping_patience: 10
   batch_size: 64
   learning_rate: 0.001
   weight_decay: 0.0
@@ -37,6 +39,9 @@ hash_params:
   - training.learning_rate
   - training.weight_decay
   - training.optimizer
+  - training.early_stopping_patience
   - loss.type
   - loss.pos_weight
   - split.seed
+  - project.features
+  - project.labels

@@ -129,16 +129,19 @@ def evaluate_epoch(
 
 def save_artifacts(
     run_id: str,
+    project_basename: str,
     model: nn.Module,
-    config_snapshot: bytes,
+    framework_snapshot: bytes,
+    project_snapshot: bytes,
     metrics: dict[str, Any],
     history: list[dict[str, Any]],
     artifacts_root: str | Path = "artifacts",
 ) -> Path:
-    output_dir = Path(artifacts_root) / run_id
+    output_dir = Path(artifacts_root) / project_basename / run_id
     output_dir.mkdir(parents=True, exist_ok=True)
     torch.save(model.state_dict(), output_dir / "model.pt")
-    (output_dir / "framework.yaml").write_bytes(config_snapshot)
+    (output_dir / "framework.yaml").write_bytes(framework_snapshot)
+    (output_dir / f"{project_basename}.yaml").write_bytes(project_snapshot)
     with (output_dir / "metrics.json").open("w", encoding="utf-8") as file:
         json.dump(metrics, file, indent=2, sort_keys=True)
     with (output_dir / "training_history.csv").open("w", newline="", encoding="utf-8") as file:
