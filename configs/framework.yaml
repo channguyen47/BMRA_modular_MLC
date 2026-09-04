@@ -13,6 +13,28 @@ model:
   dropout: 0.2
   use_missingness_mask: true
 
+benchmark:
+  type: xgboost
+  fallback: decision_tree
+  use_missingness_mask: true
+  random_state: 42
+  xgboost:
+    n_estimators: 150
+    learning_rate: 0.05
+    max_depth: 4
+    min_child_weight: 1.0
+    subsample: 0.8
+    colsample_bytree: 0.8
+    reg_lambda: 1.0
+    balance_classes: true
+    tree_method: hist
+    device: cpu
+    n_jobs: -1
+  decision_tree:
+    max_depth: 6
+    min_samples_leaf: 5
+    class_weight: balanced
+
 training:
   epochs: 300
   early_stopping_patience: 10
@@ -21,11 +43,36 @@ training:
   weight_decay: 0.0
   optimizer: adam
 
+cross_validation:
+  enabled: true
+  folds: 3
+  selection_metric: micro_f1
+  thresholds: [0.2, 0.3, 0.4, 0.5, 0.6]
+  min_positive_count_for_label_threshold: 5
+  final_epochs: median_best_epoch
+  candidates:
+    - name: baseline
+      model:
+        hidden_dims: [128, 128, 64]
+        dropout: 0.2
+      training:
+        learning_rate: 0.001
+        weight_decay: 0.0
+    - name: compact_regularized
+      model:
+        hidden_dims: [128, 64]
+        dropout: 0.3
+      training:
+        learning_rate: 0.001
+        weight_decay: 0.0001
+
 loss:
   type: masked_bce
   pos_weight: null
 
 split:
+  strategy: grouped_multilabel
+  group_column: ID
   train: 0.7
   val: 0.15
   test: 0.15
@@ -36,12 +83,21 @@ hash_params:
   - model.activation
   - model.dropout
   - model.use_missingness_mask
+  - benchmark.type
+  - benchmark.fallback
+  - benchmark.use_missingness_mask
+  - benchmark.random_state
+  - benchmark.xgboost
+  - benchmark.decision_tree
   - training.learning_rate
   - training.weight_decay
   - training.optimizer
   - training.early_stopping_patience
+  - cross_validation
   - loss.type
   - loss.pos_weight
+  - split.strategy
+  - split.group_column
   - split.seed
   - project.features
   - project.labels

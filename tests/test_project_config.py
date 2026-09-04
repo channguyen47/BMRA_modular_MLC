@@ -9,7 +9,10 @@ def test_project_feature_and_label_lists_match_categories():
 
     source_name = lambda name: re.sub(r"\.\d+$", "", name)
     expected_features = (
-        project["Observations"] + project["Diagnosis"] + project["Problem Area"]
+        project["Daily habits Groups"]
+        + project["Observations"]
+        + project["Diagnosis"]
+        + project["Problem Area"]
     )
     expected_labels = project["Treatment"] + project["Exercises"] + project["Supplements"]
 

@@ -10,3 +10,5 @@ artifacts/*
 !artifacts/.gitkeep
 /configs/projects/*
 !/configs/projects/bmra_student_project.yaml
+notebooks/*
+!notebooks/03_label_missingness_vs_accuracy.ipynb
